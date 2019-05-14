@@ -239,6 +239,53 @@ vdso已经替换vsyscall。vsyscall被保留的原因是为了向后兼容。
 * vsyscall提供3种系统调用: `gettimeofday, time, getcpu`
 * vdso提供4种系统调用: `__vdso_clock_gettime, __vdso_getcpu, __vdso_gettimeofday,  __vdso_time`
 
+## 多线程情况下的内存布局
+
+修改memory_layout程序，增加三个线程，总共4个子线程，一个主线程。
+
+可以看到如下的内存布局。
+
+```
+00400000-00401000 r-xp 00000000 fd:11 6961369                            /mnt/liangtao/memory_layout
+00600000-00601000 r--p 00000000 fd:11 6961369                            /mnt/liangtao/memory_layout
+00601000-00602000 rw-p 00001000 fd:11 6961369                            /mnt/liangtao/memory_layout
+024d3000-024f4000 rw-p 00000000 00:00 0                                  [heap]
+7f3620000000-7f3620021000 rw-p 00000000 00:00 0 						 [heap]
+7f3620021000-7f3624000000 ---p 00000000 00:00 0 
+7f3624000000-7f3624021000 rw-p 00000000 00:00 0 						 [heap]
+7f3624021000-7f3628000000 ---p 00000000 00:00 0 
+7f3628000000-7f3628021000 rw-p 00000000 00:00 0 						 [heap]
+7f3628021000-7f362c000000 ---p 00000000 00:00 0 
+7f362cf98000-7f362cf99000 ---p 00000000 00:00 0 
+7f362cf99000-7f362d799000 rw-p 00000000 00:00 0                          [stack:4894]
+7f362d799000-7f362d79a000 ---p 00000000 00:00 0 
+7f362d79a000-7f362df9a000 rw-p 00000000 00:00 0                          [stack:4893]
+7f362df9a000-7f362df9b000 ---p 00000000 00:00 0 
+7f362df9b000-7f362e79b000 rw-p 00000000 00:00 0                          [stack:4892]
+7f362e79b000-7f362e79c000 ---p 00000000 00:00 0 
+7f362e79c000-7f362ef9c000 rw-p 00000000 00:00 0                          [stack:4891]
+7f362ef9c000-7f362f152000 r-xp 00000000 fd:01 132823                     /usr/lib64/libc-2.17.so
+7f362f152000-7f362f352000 ---p 001b6000 fd:01 132823                     /usr/lib64/libc-2.17.so
+7f362f352000-7f362f356000 r--p 001b6000 fd:01 132823                     /usr/lib64/libc-2.17.so
+7f362f356000-7f362f358000 rw-p 001ba000 fd:01 132823                     /usr/lib64/libc-2.17.so
+7f362f358000-7f362f35d000 rw-p 00000000 00:00 0 
+7f362f35d000-7f362f374000 r-xp 00000000 fd:01 132849                     /usr/lib64/libpthread-2.17.so
+7f362f374000-7f362f573000 ---p 00017000 fd:01 132849                     /usr/lib64/libpthread-2.17.so
+7f362f573000-7f362f574000 r--p 00016000 fd:01 132849                     /usr/lib64/libpthread-2.17.so
+7f362f574000-7f362f575000 rw-p 00017000 fd:01 132849                     /usr/lib64/libpthread-2.17.so
+7f362f575000-7f362f579000 rw-p 00000000 00:00 0 
+7f362f579000-7f362f599000 r-xp 00000000 fd:01 202080                     /usr/lib64/ld-2.17.so
+7f362f785000-7f362f788000 rw-p 00000000 00:00 0 
+7f362f795000-7f362f798000 rw-p 00000000 00:00 0 
+7f362f798000-7f362f799000 r--p 0001f000 fd:01 202080                     /usr/lib64/ld-2.17.so
+7f362f799000-7f362f79a000 rw-p 00020000 fd:01 202080                     /usr/lib64/ld-2.17.so
+7f362f79a000-7f362f79b000 rw-p 00000000 00:00 0 
+7ffd22277000-7ffd22298000 rw-p 00000000 00:00 0                          [stack]
+7ffd222e9000-7ffd222eb000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+```
+
 ## 参考文献
 
 [Working with the ELF Program Format](http://www.ouah.org/RevEng/x430.htm)
+[Software Security](https://inst.eecs.berkeley.edu/~cs161/sp15/slides/lec3-sw-vulns.pdf)
