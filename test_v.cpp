@@ -40,7 +40,7 @@ public:
 	virtual int incr() {
 		return x++;
 	}
-	
+
 	virtual int get() {
 		return x + y;
 	}
@@ -65,6 +65,11 @@ public:
 	}
 };
 
+class Derive4: public Base3
+{
+
+};
+
 typedef void(*vfunPtr)();
 
 int main(void)
@@ -73,6 +78,8 @@ int main(void)
 	Derive2 d2;
 	Base3* b1 = new Base3();
 	Base3* b2 = new Derive3();
+	Derive4* b3 = new Derive4();
+	Base3* b4 = new Derive4();
 
 	std::cout << "pointer size: " << sizeof(void *) << std::endl;
 	std::cout << "int size: " << sizeof(int) << std::endl;
