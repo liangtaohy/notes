@@ -85,7 +85,7 @@ long -> encoding
 ## Partition
 range-based: 平衡性差
 
-hash-based: overloaded partitions (使用一致性哈希解决)
+hash-based: overloaded partitions (即热点问题) (使用一致性哈希解决)
 
 # 缓存 [Evolve]
 
